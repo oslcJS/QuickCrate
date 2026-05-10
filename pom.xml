@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.quickcrates</groupId>
+    <artifactId>QuickCrates</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>QuickCrates</name>
+    <description>Free, open-source crate plugin with weighted rewards, animations, virtual/physical keys.</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <!-- Compile baseline = oldest supported MC (1.20.4). Runtime supports up through 26.1.2. -->
+        <paper.api.version>1.20.4-R0.1-SNAPSHOT</paper.api.version>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>placeholderapi</id>
+            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
+        <repository>
+            <id>jitpack</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>${paper.api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>2.11.6</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>QuickCrates-${project.version}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <release>17</release>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals><goal>shade</goal></goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <minimizeJar>false</minimizeJar>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!--
+      Build matrix — build against each supported Paper API to verify source compatibility.
+      Use:  mvn -P paper-1.21.8 clean package
+      The "default" build (no profile) targets 1.20.4 to keep maximum runtime compatibility.
+      Supported MC versions: 1.20.4, 1.20.5, 1.20.6, 1.21, 1.21.1, 1.21.2, 1.21.3, 1.21.4,
+                             1.21.5, 1.21.6, 1.21.7, 1.21.8, 26.1, 26.1.1, 26.1.2
+    -->
+    <profiles>
+        <profile><id>paper-1.20.4</id><properties><paper.api.version>1.20.4-R0.1-SNAPSHOT</paper.api.version></properties></profile>
+        <profile><id>paper-1.20.5</id><properties><paper.api.version>1.20.5-R0.1-SNAPSHOT</paper.api.version></properties></profile>
+        <profile><id>paper-1.20.6</id><properties><paper.api.version>1.20.6-R0.1-SNAPSHOT</paper.api.version></properties></profile>
+        <profile><id>paper-1.21</id><properties><paper.api.version>1.21-R0.1-SNAPSHOT</paper.api.version></properties></profile>
+        <profile><id>paper-1.21.1</id><properties><paper.api.version>1.21.1-R0.1-SNAPSHOT</paper.api.version></properties></profile>
+        <profile><id>paper-1.21.3</id><properties><paper.api.version>1.21.3-R0.1-SNAPSHOT</paper.api.version></properties></profile>
+        <profile><id>paper-1.21.4</id><properties><paper.api.version>1.21.4-R0.1-SNAPSHOT</paper.api.version></properties></profile>
+        <profile><id>paper-1.21.5</id><properties><paper.api.version>1.21.5-R0.1-SNAPSHOT</paper.api.version></properties></profile>
+        <profile><id>paper-1.21.6</id><properties><paper.api.version>1.21.6-R0.1-SNAPSHOT</paper.api.version></properties></profile>
+        <profile><id>paper-1.21.7</id><properties><paper.api.version>1.21.7-R0.1-SNAPSHOT</paper.api.version></properties></profile>
+        <profile><id>paper-1.21.8</id><properties><paper.api.version>1.21.8-R0.1-SNAPSHOT</paper.api.version></properties></profile>
+        <!-- Paper 26.1+ uses a new versioning scheme: {VERSION}.build.+ instead of {VERSION}-R0.1-SNAPSHOT -->
+        <profile><id>paper-26.1</id><properties><paper.api.version>[26.1.build,26.1.1.build)</paper.api.version></properties></profile>
+        <profile><id>paper-26.1.1</id><properties><paper.api.version>[26.1.1.build,26.1.2.build)</paper.api.version></properties></profile>
+        <profile><id>paper-26.1.2</id><properties><paper.api.version>[26.1.2.build,)</paper.api.version></properties></profile>
+    </profiles>
+</project>

@@ -1,0 +1,73 @@
+# Example crate definition. Drop additional .yml files in /crates to add more.
+id: vote
+display-name: "&b&lVote Crate"
+key:
+  material: TRIPWIRE_HOOK
+  name: "&b&lVote Key"
+  lore:
+    - "&7Right-click a Vote Crate to use."
+    - "&8(Virtual keys also supported)"
+  glow: true
+
+# Animation: SPIN | CSGO | ROULETTE | QUICK | FIREWORK
+animation: CSGO
+
+# Block placement (for physical crates). Optional — crates can be virtual-only.
+locations:
+  - world: world
+    x: 0
+    y: 65
+    z: 0
+
+preview-gui:
+  rows: 3
+  title: "&8Vote Crate Rewards"
+
+rewards:
+  - id: diamond
+    display:
+      material: DIAMOND
+      name: "&b1 Diamond"
+      lore: ["&7Common reward"]
+    weight: 50
+    items:
+      - material: DIAMOND
+        amount: 1
+    broadcast: false
+
+  - id: ironset
+    display:
+      material: IRON_CHESTPLATE
+      name: "&fIron Armor Set"
+    weight: 30
+    items:
+      - material: IRON_HELMET
+        amount: 1
+      - material: IRON_CHESTPLATE
+        amount: 1
+      - material: IRON_LEGGINGS
+        amount: 1
+      - material: IRON_BOOTS
+        amount: 1
+    broadcast: false
+
+  - id: netherite
+    display:
+      material: NETHERITE_INGOT
+      name: "&5&lNetherite Ingot"
+      lore: ["&dRare!"]
+      glow: true
+    weight: 5
+    items:
+      - material: NETHERITE_INGOT
+        amount: 1
+    broadcast: true
+
+  - id: jackpot
+    display:
+      material: NETHER_STAR
+      name: "&6&lJACKPOT &e(1000 coins)"
+      glow: true
+    weight: 1
+    money: 1000
+    broadcast: true
