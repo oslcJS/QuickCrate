@@ -1,60 +1,133 @@
-# QuickCrates
+<p align="center">
+  <img src="https://raw.githubusercontent.com/oslcJS/.github/main/assets/VAULT.gif" width="160">
+</p>
 
-Free, open-source Minecraft crate plugin — weighted rewards, animated chest GUI, virtual & physical keys, preview GUI, PlaceholderAPI support.
+<h1 align="center">QuickCrates</h1>
 
-## Supported versions
-Paper / Spigot **1.20.4 → 26.1.2** (1.20.4, 1.20.5, 1.20.6, 1.21, 1.21.1, 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 26.1, 26.1.2).
+<p align="center">
+Free and open source crate system for Minecraft servers.
+</p>
 
-The plugin uses only stable Bukkit/Paper API surfaces (Inventory, ItemMeta, PersistentDataContainer, BukkitRunnable) so a single jar runs across the whole range. Per-version compile profiles are provided to verify source compatibility.
+---
 
-## Build
+<p align="center">
+  <span style="font-family: 'IBM Plex Mono', monospace; font-style: italic; border: 1px solid #1c1c1c; padding: 6px 10px; color: #555; background: #000;">
+    status <span style="color:#222;">/</span>
+    <span style="color:#fff; font-weight:600;">stable</span>
+  </span>
+</p>
 
-Single universal jar:
+---
+
+## overview
+
+![](https://raw.githubusercontent.com/oslcJS/.github/main/assets/14.gif)
+
+QuickCrates is a lightweight crate plugin featuring weighted rewards, animations, preview GUIs, physical and virtual keys, and PlaceholderAPI support.
+
+---
+
+## features
+
+![](https://raw.githubusercontent.com/oslcJS/.github/main/assets/2.gif)
+
+- weighted rewards  
+- animated opening GUIs  
+- virtual & physical keys  
+- preview inventories  
+- PlaceholderAPI support  
+- direct item rewards  
+- configurable broadcasts  
+
+---
+
+## compatibility
+
+![](https://raw.githubusercontent.com/oslcJS/.github/main/assets/3.gif)
+
+- Paper  
+- Spigot  
+- 1.20.4 → 1.21.8  
+- 26.1 → 26.1.2  
+
+Single jar support across all versions.
+
+---
+
+## installs
+
+![](https://raw.githubusercontent.com/oslcJS/.github/main/assets/4.gif)
+
+Drop the jar into `/plugins` and restart the server.
+
+---
+
+## configs
+
+![](https://raw.githubusercontent.com/oslcJS/.github/main/assets/5.gif)
+
+Crates are configured in:
+
+```txt
+plugins/QuickCrates/crates/
 ```
-mvn clean package
-```
-Produces `target/QuickCrates-1.0.0.jar`.
 
-Build against every supported version:
-```
-./build-all.sh
-```
-Or use the GitHub Actions matrix (`.github/workflows/build.yml`).
+Supports:
+- rewards  
+- weights  
+- commands  
+- money rewards  
+- broadcasts  
+- animations  
 
-Build against one specific version:
-```
-mvn -P paper-1.21.8 clean package
-mvn -P paper-26.1.2 clean package
-```
+---
 
-## Commands
-- `/qc list` — list crates
-- `/qc reload` — reload config
-- `/qc preview <crate>` — open preview GUI
-- `/qc givekey <player> <crate> [amount] [virtual]` — give keys
-- `/qc setlocation <crate>` — bind looked-at block as crate
-- `/key give|givevirtual <player> <crate> [amount]`
+## plugins
 
-## Permissions
-- `quickcrates.admin` — admin commands
-- `quickcrates.use` — open crates (default)
-- `quickcrates.preview` — preview crates (default)
+![](https://raw.githubusercontent.com/oslcJS/.github/main/assets/7.gif)
 
-## Crate file (`plugins/QuickCrates/crates/<id>.yml`)
-See bundled `vote.yml`. Each reward has `weight` (relative), `display`, optional `items`, optional `money`, optional non-item `commands` (`{player}` placeholder), and optional `broadcast: true` for rare wins.
+- PlaceholderAPI  
+- QuickEco integration  
+- multi-plugin compatible  
 
-Item rewards are created directly from `plugins/QuickCrates/items.json`; QuickCrates does not dispatch `/give` for crate rewards. Legacy `give {player} <item> [amount]` reward commands are intercepted and converted into direct inventory items.
+---
 
-## Animations
-`SPIN`, `CSGO`, `ROULETTE`, `QUICK`, `FIREWORK`. Set per crate via `animation:`.
+## command
 
-## API
-```java
-QuickCratesAPI api = Bukkit.getServicesManager().load(QuickCratesAPI.class);
-api.getCrateManager().get("vote");
-api.getKeyManager().addVirtual(player, "vote", 5);
+![](https://raw.githubusercontent.com/oslcJS/.github/main/assets/11.gif)
+
+```txt
+/qc list
+/qc reload
+/qc preview <crate>
+/qc givekey <player> <crate>
+/qc setlocation <crate>
 ```
 
-## PlaceholderAPI
-- `%quickcrates_keys_<crateId>%` — virtual key count
-- `%quickcrates_crate_count%` — number of loaded crates
+---
+
+## backend
+
+![](https://raw.githubusercontent.com/oslcJS/.github/main/assets/9.gif)
+
+Uses stable Bukkit/Paper APIs only:
+- Inventory API  
+- ItemMeta  
+- PersistentDataContainer  
+- BukkitRunnable  
+
+---
+
+## support
+
+![](https://raw.githubusercontent.com/oslcJS/.github/main/assets/8.gif)
+
+Built for modern Minecraft servers with lightweight runtime performance.
+
+---
+
+## license
+
+![](https://raw.githubusercontent.com/oslcJS/.github/main/assets/6.gif)
+
+MIT
