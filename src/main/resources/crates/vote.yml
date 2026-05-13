@@ -1,4 +1,3 @@
-# Example crate definition. Drop additional .yml files in /crates to add more.
 id: vote
 display-name: "&b&lVote Crate"
 key:
@@ -9,10 +8,8 @@ key:
     - "&8(Virtual keys also supported)"
   glow: true
 
-# Animation: SPIN | CSGO | ROULETTE | QUICK | FIREWORK
 animation: CSGO
 
-# Block placement (for physical crates). Optional — crates can be virtual-only.
 locations:
   - world: world
     x: 0

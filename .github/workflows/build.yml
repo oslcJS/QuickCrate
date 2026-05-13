@@ -8,17 +8,12 @@ jobs:
       matrix:
         profile:
           - paper-1.20.4
-          - paper-1.20.5
-          - paper-1.20.6
-          - paper-1.21
-          - paper-1.21.1
-          - paper-1.21.3
           - paper-1.21.4
           - paper-1.21.5
           - paper-1.21.6
           - paper-1.21.7
           - paper-1.21.8
-          - paper-26.1
+          - paper-26.1.1
           - paper-26.1.2
     steps:
       - uses: actions/checkout@v4

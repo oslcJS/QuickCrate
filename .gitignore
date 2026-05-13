@@ -1,0 +1,10 @@
+target/
+dist/
+*.jar
+.classpath
+.project
+.settings/
+*.iml
+.idea/
+*.log
+opencode

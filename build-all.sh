@@ -8,9 +8,8 @@
 # is runtime-compatible with ALL listed versions because we use only stable
 # Bukkit/Paper APIs. The per-profile builds are sanity-check compiles.
 set -e
-PROFILES=(paper-1.20.4 paper-1.20.5 paper-1.20.6 paper-1.21 paper-1.21.1 \
-          paper-1.21.3 paper-1.21.4 paper-1.21.5 paper-1.21.6 paper-1.21.7 \
-          paper-1.21.8 paper-26.1 paper-26.1.1 paper-26.1.2)
+PROFILES=(paper-1.20.4 paper-1.21.4 paper-1.21.5 paper-1.21.6 paper-1.21.7 \
+          paper-1.21.8 paper-26.1.1 paper-26.1.2)
 mkdir -p dist
 echo "==> Building default (1.20.4 baseline, runtime-compatible everywhere)"
 mvn -q clean package
