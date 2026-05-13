@@ -17,6 +17,15 @@ Free and open source crate system for Minecraft servers.
   </span>
 </p>
 
+<div align="center">
+  <table>
+    <tr>
+      <td><img src="https://raw.githubusercontent.com/oslcJS/.github/main/assets/logo_03.png" width="72"></td>
+      <td><strong>QuickPlugins</strong><br>Small, fast Minecraft plugins built for modern Paper, Spigot, and Purpur servers.</td>
+    </tr>
+  </table>
+</div>
+
 ---
 
 ## overview
