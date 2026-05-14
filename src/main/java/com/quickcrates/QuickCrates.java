@@ -41,9 +41,9 @@ public final class QuickCrates extends JavaPlugin implements QuickCratesAPI {
         Msg.init(this);
         this.itemRegistry = new ItemRegistry(this);
         itemRegistry.load();
+        this.keyManager = new KeyManager(this);
         this.storageManager = new StorageManager(this);
         this.crateManager = new CrateManager(this);
-        this.keyManager = new KeyManager(this);
 
         crateManager.loadAll();
 
@@ -75,6 +75,10 @@ public final class QuickCrates extends JavaPlugin implements QuickCratesAPI {
 
         
         Bukkit.getScheduler().runTaskLater(this, () -> CrateDisplayManager.respawnAll(this), 1L);
+
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> {
+            if (storageManager != null) storageManager.saveAll();
+        }, 600L, 600L);
 
         getLogger().info("QuickCrates enabled. Loaded " + crateManager.getCrates().size() + " crates. " +
                 "Server: " + Bukkit.getBukkitVersion());
