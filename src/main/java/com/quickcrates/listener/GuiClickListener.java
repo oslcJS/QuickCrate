@@ -87,6 +87,7 @@ public class GuiClickListener implements Listener {
                 return;
             }
 
+            Msg.playSound(player, "settings.win-sound", "ENTITY_PLAYER_LEVELUP", 1f, 1f);
             selected.give(player);
             Msg.send(player, "win", "reward", selected.displayName(), "crate", crate.getDisplayName());
             return;

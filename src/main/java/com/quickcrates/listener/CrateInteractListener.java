@@ -62,6 +62,7 @@ public class CrateInteractListener implements Listener {
         if (mode == CrateMode.DONUT_SMP) {
             plugin.getCrateManager().lock(p.getUniqueId());
             guiClickListener.trackDonutSmp(p.getUniqueId());
+            Msg.playSound(p, "settings.open-sound", "BLOCK_ENDER_CHEST_OPEN", 0.9f, 0.8f);
             DonutSmpGui.open(plugin, p, crate);
             return;
         }

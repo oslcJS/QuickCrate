@@ -1,7 +1,9 @@
 package com.quickcrates.util;
 
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Msg {
@@ -23,5 +25,13 @@ public final class Msg {
             msg = msg.replace("{" + repl[i] + "}", repl[i+1]);
         }
         to.sendMessage(prefix() + color(msg));
+    }
+
+    public static void playSound(Player p, String configPath, String fallback, float volume, float pitch) {
+        String name = plugin.getConfig().getString(configPath, fallback);
+        try {
+            Sound s = Sound.valueOf(name);
+            p.playSound(p.getLocation(), s, volume, Math.max(0.5f, Math.min(2f, pitch)));
+        } catch (Throwable ignored) {}
     }
 }
