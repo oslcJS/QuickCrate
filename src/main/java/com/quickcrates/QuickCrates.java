@@ -9,7 +9,6 @@ import com.quickcrates.command.KeyCommand;
 import com.quickcrates.command.QuickCratesCommand;
 import com.quickcrates.key.KeyAllManager;
 import com.quickcrates.compat.PapiHook;
-import com.quickcrates.compat.QuickApiBridge;
 import com.quickcrates.crate.CrateManager;
 import com.quickcrates.key.KeyManager;
 import com.quickcrates.listener.CrateDisplayManager;
@@ -22,6 +21,7 @@ import com.quickcrates.util.ItemRegistry;
 import com.quickcrates.util.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class QuickCrates extends JavaPlugin implements QuickCratesAPI {
@@ -35,7 +35,6 @@ public final class QuickCrates extends JavaPlugin implements QuickCratesAPI {
     private GuiClickListener guiClickListener;
     private CustomCommandManager customCommandManager;
     private KeyAllManager keyAllManager;
-    private QuickApiBridge quickApiBridge;
 
     @Override
     public void onEnable() {
@@ -70,9 +69,6 @@ public final class QuickCrates extends JavaPlugin implements QuickCratesAPI {
         this.keyAllManager = new KeyAllManager(this);
         keyAllManager.start();
 
-        this.quickApiBridge = new QuickApiBridge(this);
-        quickApiBridge.hook();
-
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new PapiHook(this).register();
             getLogger().info("Hooked into PlaceholderAPI.");
@@ -98,7 +94,6 @@ public final class QuickCrates extends JavaPlugin implements QuickCratesAPI {
 
     @Override
     public void onDisable() {
-        if (quickApiBridge != null) quickApiBridge.unhook();
         if (keyAllManager != null) keyAllManager.stop();
         if (storageManager != null) storageManager.saveAll();
         if (crateManager != null) crateManager.shutdown();
@@ -121,5 +116,27 @@ public final class QuickCrates extends JavaPlugin implements QuickCratesAPI {
     public ItemRegistry getItemRegistry() { return itemRegistry; }
     public CustomCommandManager getCustomCommandManager() { return customCommandManager; }
     public KeyAllManager getKeyAllManager() { return keyAllManager; }
-    public QuickApiBridge getQuickApiBridge() { return quickApiBridge; }
+
+    @Override
+    public int getPlayerKeyCount(Player player, String crateId) {
+        if (crateManager == null || keyManager == null) return 0;
+        var crate = crateManager.get(crateId);
+        if (crate == null) return 0;
+        return keyManager.countAll(player, crate);
+    }
+
+    @Override
+    public int getTotalCrateCount() {
+        return crateManager != null ? crateManager.getCrates().size() : 0;
+    }
+
+    @Override
+    public boolean isKeyAllActive() {
+        return keyAllManager != null && keyAllManager.isEnabled();
+    }
+
+    @Override
+    public String getPluginVersion() {
+        return getDescription().getVersion();
+    }
 }

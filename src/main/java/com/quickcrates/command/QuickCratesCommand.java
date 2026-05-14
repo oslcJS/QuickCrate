@@ -31,8 +31,6 @@ public class QuickCratesCommand implements CommandExecutor, TabCompleter {
                 plugin.getCustomCommandManager().loadAll();
                 plugin.getKeyAllManager().stop();
                 plugin.getKeyAllManager().start();
-                plugin.getQuickApiBridge().unhook();
-                plugin.getQuickApiBridge().hook();
                 Msg.send(s, "reload");
             }
 

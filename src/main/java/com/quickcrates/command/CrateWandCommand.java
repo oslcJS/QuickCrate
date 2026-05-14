@@ -7,7 +7,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class CrateWandCommand implements CommandExecutor {
+import java.util.List;
+
+public class CrateWandCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd,
@@ -25,5 +27,11 @@ public class CrateWandCommand implements CommandExecutor {
         p.sendMessage(Msg.color(Msg.prefix() + "&aYou received the &6&lCrate Wand&a! "
                 + "&7Right-click a chest/barrel/shulker to link it to a crate."));
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd,
+                                     @NotNull String label, @NotNull String[] args) {
+        return List.of();
     }
 }

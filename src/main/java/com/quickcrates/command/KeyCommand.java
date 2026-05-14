@@ -8,7 +8,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class KeyCommand implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.List;
+
+public class KeyCommand implements CommandExecutor, TabCompleter {
     private final QuickCrates plugin;
     public KeyCommand(QuickCrates p){ this.plugin = p; }
 
@@ -67,5 +70,31 @@ public class KeyCommand implements CommandExecutor {
             s.sendMessage(Msg.color("&cUsage: /key <give|givevirtual|check> <player> <crate> [amount]"));
         }
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender s, @NotNull Command c, @NotNull String l, @NotNull String[] a) {
+        if (a.length == 1) {
+            return List.of("give", "givevirtual", "check");
+        }
+        if (a.length == 2 && (a[0].equalsIgnoreCase("give") || a[0].equalsIgnoreCase("givevirtual"))) {
+            List<String> out = new ArrayList<>();
+            for (Player p : plugin.getServer().getOnlinePlayers()) {
+                if (p.getName().toLowerCase().startsWith(a[1].toLowerCase())) {
+                    out.add(p.getName());
+                }
+            }
+            return out;
+        }
+        if (a.length == 3 && (a[0].equalsIgnoreCase("give") || a[0].equalsIgnoreCase("givevirtual"))) {
+            List<String> out = new ArrayList<>();
+            for (Crate crate : plugin.getCrateManager().getCrates()) {
+                if (crate.getId().toLowerCase().startsWith(a[2].toLowerCase())) {
+                    out.add(crate.getId());
+                }
+            }
+            return out;
+        }
+        return List.of();
     }
 }
