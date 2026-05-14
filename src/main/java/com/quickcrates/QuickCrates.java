@@ -9,6 +9,7 @@ import com.quickcrates.command.KeyCommand;
 import com.quickcrates.command.QuickCratesCommand;
 import com.quickcrates.key.KeyAllManager;
 import com.quickcrates.compat.PapiHook;
+import com.quickcrates.compat.QuickApiBridge;
 import com.quickcrates.crate.CrateManager;
 import com.quickcrates.key.KeyManager;
 import com.quickcrates.listener.CrateDisplayManager;
@@ -34,6 +35,7 @@ public final class QuickCrates extends JavaPlugin implements QuickCratesAPI {
     private GuiClickListener guiClickListener;
     private CustomCommandManager customCommandManager;
     private KeyAllManager keyAllManager;
+    private QuickApiBridge quickApiBridge;
 
     @Override
     public void onEnable() {
@@ -68,6 +70,9 @@ public final class QuickCrates extends JavaPlugin implements QuickCratesAPI {
         this.keyAllManager = new KeyAllManager(this);
         keyAllManager.start();
 
+        this.quickApiBridge = new QuickApiBridge(this);
+        quickApiBridge.hook();
+
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new PapiHook(this).register();
             getLogger().info("Hooked into PlaceholderAPI.");
@@ -93,6 +98,7 @@ public final class QuickCrates extends JavaPlugin implements QuickCratesAPI {
 
     @Override
     public void onDisable() {
+        if (quickApiBridge != null) quickApiBridge.unhook();
         if (keyAllManager != null) keyAllManager.stop();
         if (storageManager != null) storageManager.saveAll();
         if (crateManager != null) crateManager.shutdown();
@@ -115,4 +121,5 @@ public final class QuickCrates extends JavaPlugin implements QuickCratesAPI {
     public ItemRegistry getItemRegistry() { return itemRegistry; }
     public CustomCommandManager getCustomCommandManager() { return customCommandManager; }
     public KeyAllManager getKeyAllManager() { return keyAllManager; }
+    public QuickApiBridge getQuickApiBridge() { return quickApiBridge; }
 }

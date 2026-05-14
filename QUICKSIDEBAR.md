@@ -1,68 +1,40 @@
 # QuickSidebar Integration
 
 QuickSidebar displays a sidebar (scoreboard) on the right side of the screen.
-The sidebar should show real-time data from QuickCrates: **key counts**, **KeyAll time remaining**, and **crate info**.
+The sidebar shows real-time data from QuickCrates via **QuickApi**.
+
+**No PlaceholderAPI dependency.** All data flows through QuickApi.
 
 ---
 
-## PlaceholderAPI Placeholders (already registered by QuickCrates)
+## Data Flow
 
-| Placeholder | Description | Example |
-|---|---|---|
-| `%quickcrates_keys_<crate>%` | Total keys (physical + virtual) for a crate | `%quickcrates_keys_vote%` → `3` |
-| `%quickcrates_keys_physical_<crate>%` | Physical keys only | `%quickcrates_keys_physical_vote%` → `1` |
-| `%quickcrates_keys_virtual_<crate>%` | Virtual keys only | `%quickcrates_keys_virtual_vote%` → `2` |
-| `%quickcrates_keyall_time%` | Time until next auto KeyAll distribution | `15m 30s` |
-| `%quickcrates_keyall_seconds%` | Seconds until next KeyAll | `930` |
-
-These are provided by the existing `PapiHook.java` class. QuickSidebar just needs to use them in its sidebar config.
-
----
-
-## Internal API (for direct integration without PlaceholderAPI)
-
-QuickSidebar can access `QuickCratesAPI` via Bukkit Services:
-
-```java
-QuickCratesAPI api = Bukkit.getServicesManager().load(QuickCratesAPI.class);
-if (api != null) {
-    // Get key counts
-    int total = api.getKeyManager().countAll(player, crate);
-    int physical = api.getKeyManager().countPhysical(player, crate);
-    int virtual = api.getKeyManager().getVirtual(player, crateId);
-
-    // Get KeyAll info
-    KeyAllManager kam = ((QuickCrates) api).getKeyAllManager();
-    long secs = kam.getSecondsUntilNext();
-    boolean enabled = kam.isEnabled();
-
-    // Get crate list
-    Collection<Crate> crates = api.getCrateManager().getCrates();
-}
+```
+QuickCrates ──registers──→ QuickApi ←──reads── QuickSidebar
 ```
 
-### Key Classes
-
-| Class | Location | Purpose |
-|---|---|---|
-| `QuickCratesAPI` | `com.quickcrates.api.QuickCratesAPI` | Public API interface |
-| `KeyManager` | `com.quickcrates.key.KeyManager` | Key operations |
-| `KeyAllManager` | `com.quickcrates.key.KeyAllManager` | Auto key distribution |
-| `CrateManager` | `com.quickcrates.crate.CrateManager` | Crate registry |
-| `Crate` | `com.quickcrates.crate.Crate` | Individual crate data |
-
-### QuickCratesAPI Interface
-
-```java
-public interface QuickCratesAPI {
-    CrateManager getCrateManager();
-    KeyManager getKeyManager();
-}
-```
+- QuickCrates registers a `DataProvider` with namespace `quickcrates`
+- QuickSidebar queries QuickApi for keys/timers
+- QuickApi handles all cross-plugin communication
+- Both plugins soft-depend on QuickApi
 
 ---
 
-## Suggested QuickSidebar Config
+## Available Data (namespace: `quickcrates`)
+
+| Key | Type | Description |
+|---|---|---|
+| `keys_total_<crate>` | int | Physical + virtual keys for a crate |
+| `keys_physical_<crate>` | int | Physical keys only |
+| `keys_virtual_<crate>` | int | Virtual keys only |
+| `keyall_time` | string | Time until next auto KeyAll (`15m 30s`) |
+| `keyall_seconds` | long | Seconds until next KeyAll |
+| `keyall_enabled` | boolean | Is auto KeyAll enabled |
+| `crate_count` | int | Number of loaded crates |
+
+---
+
+## QuickSidebar Config (YAML)
 
 ```yaml
 sidebar:
@@ -70,57 +42,65 @@ sidebar:
   lines:
     - "&7&m-----------------"
     - "&fYour Keys:"
-    - " &e%quickcrates_keys_vote% &7Vote Keys"
-    - " &e%quickcrates_keys_rare% &7Rare Keys"
+    - " &e{{ quickcrates.keys_total_vote }} &7Vote Keys"
+    - " &e{{ quickcrates.keys_total_rare }} &7Rare Keys"
     - ""
     - "&fNext KeyAll:"
-    - " &e%quickcrates_keyall_time%"
+    - " &e{{ quickcrates.keyall_time }}"
     - "&7&m-----------------"
-  update-interval: 20  # ticks (1 second)
+  update-interval: 20
+```
+
+Syntax: `{{ namespace.key }}` → resolved by QuickSidebar via QuickApi API.
+
+---
+
+## Java API (for QuickSidebar's internal use)
+
+```java
+// Get QuickApi instance
+QuickApi api = Bukkit.getServicesManager().load(QuickApi.class);
+if (api == null) return; // QuickApi not installed
+
+// Read data for a player
+int voteKeys = api.getInt("quickcrates", "keys_total_vote", player);
+String timeLeft = api.getString("quickcrates", "keyall_time", player);
+int crateCount = api.getInt("quickcrates", "crate_count", player);
 ```
 
 ---
 
-## Data Flow
+## QuickApi Interface Reference
 
-```
-QuickCrates (manages keys/timers)
-    ↓
-PapiHook (registers %quickcrates_*% placeholders)
-    ↓
-PlaceholderAPI (resolves placeholders)
-    ↓
-QuickSidebar (displays in sidebar)
-```
-
-Or for direct integration:
-
-```
-QuickCrates (manages keys/timers)
-    ↓
-QuickSidebar (calls QuickCratesAPI directly)
-    ↓
-Sidebar (displays)
+```java
+public interface QuickApi {
+    void registerProvider(String namespace, DataProvider provider);
+    void unregisterProvider(String namespace);
+    String getString(String namespace, String key, Player player);
+    int getInt(String namespace, String key, Player player);
+    long getLong(String namespace, String key, Player player);
+    boolean has(String namespace, String key, Player player);
+    Collection<String> getNamespaces();
+    Collection<String> getKeys(String namespace);
+}
 ```
 
 ---
 
 ## KeyAll Timer Details
 
-- `KeyAllManager.getSecondsUntilNext()` returns seconds remaining (0 if ready)
-- Timer resets when `/keyall` is manually triggered
-- Timer resets after each automatic distribution
-- Configured via `config.yml` under `keyall:` section
+- `keyall_seconds` returns the raw seconds remaining (0 if ready)
+- Timer resets on manual `/keyall` or after each auto distribution
+- Configured in QuickCrates' `config.yml` under `keyall:`
 
 ---
 
-## Maven Dependency (if QuickSidebar wants to compile against QuickCrates)
+## Plugin Dependencies
 
-```xml
-<dependency>
-    <groupId>com.quickcrates</groupId>
-    <artifactId>QuickCrates</artifactId>
-    <version>1.0</version>
-    <scope>provided</scope>
-</dependency>
 ```
+QuickApi         → standalone (required for bridge)
+QuickCrates      → softdepends on QuickApi
+QuickSidebar     → softdepends on QuickApi
+```
+
+If QuickApi is missing, QuickCrates and QuickSidebar still operate independently but without data sharing.
