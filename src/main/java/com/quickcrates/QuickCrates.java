@@ -3,6 +3,7 @@ package com.quickcrates;
 import com.quickcrates.api.QuickCratesAPI;
 import com.quickcrates.command.CrateCommand;
 import com.quickcrates.command.CrateWandCommand;
+import com.quickcrates.command.CustomCommandManager;
 import com.quickcrates.command.KeyCommand;
 import com.quickcrates.command.QuickCratesCommand;
 import com.quickcrates.compat.PapiHook;
@@ -29,6 +30,7 @@ public final class QuickCrates extends JavaPlugin implements QuickCratesAPI {
     private StorageManager storageManager;
     private ItemRegistry itemRegistry;
     private GuiClickListener guiClickListener;
+    private CustomCommandManager customCommandManager;
 
     @Override
     public void onEnable() {
@@ -55,6 +57,9 @@ public final class QuickCrates extends JavaPlugin implements QuickCratesAPI {
         registerCommand("crate", new CrateCommand(this));
         registerCommand("key", new KeyCommand(this));
         registerCommand("cratewand", new CrateWandCommand());
+
+        this.customCommandManager = new CustomCommandManager(this);
+        customCommandManager.loadAll();
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new PapiHook(this).register();
@@ -96,4 +101,5 @@ public final class QuickCrates extends JavaPlugin implements QuickCratesAPI {
     @Override public KeyManager getKeyManager() { return keyManager; }
     public StorageManager getStorageManager() { return storageManager; }
     public ItemRegistry getItemRegistry() { return itemRegistry; }
+    public CustomCommandManager getCustomCommandManager() { return customCommandManager; }
 }

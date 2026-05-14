@@ -28,6 +28,7 @@ public class QuickCratesCommand implements CommandExecutor, TabCompleter {
                 plugin.reloadConfig();
                 plugin.getItemRegistry().load();
                 plugin.getCrateManager().loadAll();
+                plugin.getCustomCommandManager().loadAll();
                 Msg.send(s, "reload");
             }
 

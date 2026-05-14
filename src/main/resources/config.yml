@@ -42,6 +42,13 @@ quickeco:
   enabled: true
   money-prefix: "&6&l$"
 
+custom-commands:
+  keys:
+    aliases: [mykeys, checkkeys]
+    permission: quickcrates.use
+    description: "Check your keys"
+    action: keys
+
 messages:
   prefix: "&6[QuickCrates] &r"
   no-permission: "&cYou don't have permission for that."
