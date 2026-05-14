@@ -2,6 +2,8 @@ package com.quickcrates.listener;
 
 import com.quickcrates.QuickCrates;
 import com.quickcrates.crate.Crate;
+import com.quickcrates.gui.DonutSmpGui;
+import com.quickcrates.reward.Reward;
 import com.quickcrates.util.Msg;
 import com.quickcrates.util.Items;
 import org.bukkit.block.Block;
@@ -9,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
@@ -18,7 +21,13 @@ import java.util.*;
 
 public class GuiClickListener implements Listener {
     private final QuickCrates plugin;
+    private final Set<UUID> donutSmpPlayers = new HashSet<>();
+
     public GuiClickListener(QuickCrates plugin) { this.plugin = plugin; }
+
+    public void trackDonutSmp(UUID uuid) {
+        donutSmpPlayers.add(uuid);
+    }
 
     private boolean isAnimation(String title) {
         return title != null && title.contains("Opening...");
@@ -37,6 +46,40 @@ public class GuiClickListener implements Listener {
         
         if (isAnimation(title)) {
             e.setCancelled(true);
+            return;
+        }
+
+        
+        if (DonutSmpGui.isDonutSmpGui(title)) {
+            e.setCancelled(true);
+            if (e.getClickedInventory() == null
+                    || !e.getClickedInventory().equals(e.getView().getTopInventory())) return;
+            ItemStack current = e.getCurrentItem();
+            if (current == null || current.getType().isAir()) return;
+            String rewardId = Items.readTag(plugin, current, "qc_donut_reward");
+            String crateId = Items.readTag(plugin, current, "qc_donut_crate");
+            if (rewardId == null || crateId == null) return;
+
+            Crate crate = plugin.getCrateManager().get(crateId);
+            if (crate == null) return;
+
+            Reward selected = null;
+            for (Reward r : crate.getRewards().all()) {
+                if (r.getId().equals(rewardId)) { selected = r; break; }
+            }
+            if (selected == null) return;
+
+            donutSmpPlayers.remove(player.getUniqueId());
+            player.closeInventory();
+            plugin.getCrateManager().unlock(player.getUniqueId());
+
+            if (player.getInventory().firstEmpty() == -1) {
+                Msg.send(player, "inventory-full");
+                return;
+            }
+
+            selected.give(player);
+            Msg.send(player, "win", "reward", selected.displayName(), "crate", crate.getDisplayName());
             return;
         }
 
@@ -89,10 +132,18 @@ public class GuiClickListener implements Listener {
     }
 
     @EventHandler
+    public void onClose(InventoryCloseEvent e) {
+        Player player = (Player) e.getPlayer();
+        if (donutSmpPlayers.remove(player.getUniqueId())) {
+            plugin.getCrateManager().unlock(player.getUniqueId());
+        }
+    }
+
+    @EventHandler
     public void onDrag(InventoryDragEvent e) {
         if (e.getView() == null) return;
         String title = e.getView().getTitle();
-        if (isAnimation(title) || isWandPicker(title)) {
+        if (isAnimation(title) || DonutSmpGui.isDonutSmpGui(title) || isWandPicker(title)) {
             e.setCancelled(true);
         }
         

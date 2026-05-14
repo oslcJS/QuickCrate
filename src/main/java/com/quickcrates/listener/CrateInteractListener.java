@@ -3,6 +3,8 @@ package com.quickcrates.listener;
 import com.quickcrates.QuickCrates;
 import com.quickcrates.animation.AnimationRunner;
 import com.quickcrates.crate.Crate;
+import com.quickcrates.crate.CrateMode;
+import com.quickcrates.gui.DonutSmpGui;
 import com.quickcrates.gui.PreviewGui;
 import com.quickcrates.util.Msg;
 import org.bukkit.block.Block;
@@ -18,10 +20,12 @@ import org.bukkit.inventory.ItemStack;
 public class CrateInteractListener implements Listener {
     private final QuickCrates plugin;
     private final AnimationRunner runner;
+    private final GuiClickListener guiClickListener;
 
-    public CrateInteractListener(QuickCrates plugin) {
+    public CrateInteractListener(QuickCrates plugin, GuiClickListener guiClickListener) {
         this.plugin = plugin;
         this.runner = new AnimationRunner(plugin);
+        this.guiClickListener = guiClickListener;
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -78,6 +82,13 @@ public class CrateInteractListener implements Listener {
         }
 
         plugin.getCrateManager().lock(p.getUniqueId());
-        runner.play(p, crate);
+
+        CrateMode mode = CrateMode.fromString(plugin.getConfig().getString("settings.mode", "DEFAULT"));
+        if (mode == CrateMode.DONUT_SMP) {
+            guiClickListener.trackDonutSmp(p.getUniqueId());
+            DonutSmpGui.open(plugin, p, crate);
+        } else {
+            runner.play(p, crate);
+        }
     }
 }

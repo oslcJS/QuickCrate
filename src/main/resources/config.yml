@@ -1,4 +1,5 @@
 settings:
+  mode: DEFAULT
   offhand-open: true
   broadcast-rare: true
   open-sound: BLOCK_ENDER_CHEST_OPEN

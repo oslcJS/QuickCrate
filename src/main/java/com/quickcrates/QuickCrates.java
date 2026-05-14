@@ -28,6 +28,7 @@ public final class QuickCrates extends JavaPlugin implements QuickCratesAPI {
     private KeyManager keyManager;
     private StorageManager storageManager;
     private ItemRegistry itemRegistry;
+    private GuiClickListener guiClickListener;
 
     @Override
     public void onEnable() {
@@ -44,8 +45,9 @@ public final class QuickCrates extends JavaPlugin implements QuickCratesAPI {
 
         crateManager.loadAll();
 
-        Bukkit.getPluginManager().registerEvents(new CrateInteractListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new GuiClickListener(this), this);
+        this.guiClickListener = new GuiClickListener(this);
+        Bukkit.getPluginManager().registerEvents(new CrateInteractListener(this, guiClickListener), this);
+        Bukkit.getPluginManager().registerEvents(guiClickListener, this);
         Bukkit.getPluginManager().registerEvents(new WandListener(this), this);
         Bukkit.getPluginManager().registerEvents(new CrateDisplayManager(this), this);
 
