@@ -29,6 +29,8 @@ public class QuickCratesCommand implements CommandExecutor, TabCompleter {
                 plugin.getItemRegistry().load();
                 plugin.getCrateManager().loadAll();
                 plugin.getCustomCommandManager().loadAll();
+                plugin.getKeyAllManager().stop();
+                plugin.getKeyAllManager().start();
                 Msg.send(s, "reload");
             }
 
@@ -125,6 +127,7 @@ public class QuickCratesCommand implements CommandExecutor, TabCompleter {
                 boolean virtual = a.length >= 5 && a[4].equalsIgnoreCase("virtual");
                 if (virtual) {
                     plugin.getKeyManager().addVirtual(target, crate.getId(), amt);
+                    plugin.getStorageManager().saveAll();
                     s.sendMessage(Msg.color("&aGave " + amt + " virtual keys."));
                 } else {
                     ItemStack key = crate.getKeyItem();

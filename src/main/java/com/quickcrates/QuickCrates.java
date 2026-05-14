@@ -4,8 +4,10 @@ import com.quickcrates.api.QuickCratesAPI;
 import com.quickcrates.command.CrateCommand;
 import com.quickcrates.command.CrateWandCommand;
 import com.quickcrates.command.CustomCommandManager;
+import com.quickcrates.command.KeyAllCommand;
 import com.quickcrates.command.KeyCommand;
 import com.quickcrates.command.QuickCratesCommand;
+import com.quickcrates.key.KeyAllManager;
 import com.quickcrates.compat.PapiHook;
 import com.quickcrates.crate.CrateManager;
 import com.quickcrates.key.KeyManager;
@@ -31,6 +33,7 @@ public final class QuickCrates extends JavaPlugin implements QuickCratesAPI {
     private ItemRegistry itemRegistry;
     private GuiClickListener guiClickListener;
     private CustomCommandManager customCommandManager;
+    private KeyAllManager keyAllManager;
 
     @Override
     public void onEnable() {
@@ -57,9 +60,13 @@ public final class QuickCrates extends JavaPlugin implements QuickCratesAPI {
         registerCommand("crate", new CrateCommand(this));
         registerCommand("key", new KeyCommand(this));
         registerCommand("cratewand", new CrateWandCommand());
+        registerCommand("keyall", new KeyAllCommand(this));
 
         this.customCommandManager = new CustomCommandManager(this);
         customCommandManager.loadAll();
+
+        this.keyAllManager = new KeyAllManager(this);
+        keyAllManager.start();
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new PapiHook(this).register();
@@ -86,6 +93,7 @@ public final class QuickCrates extends JavaPlugin implements QuickCratesAPI {
 
     @Override
     public void onDisable() {
+        if (keyAllManager != null) keyAllManager.stop();
         if (storageManager != null) storageManager.saveAll();
         if (crateManager != null) crateManager.shutdown();
         CrateDisplayManager.removeAll();
@@ -106,4 +114,5 @@ public final class QuickCrates extends JavaPlugin implements QuickCratesAPI {
     public StorageManager getStorageManager() { return storageManager; }
     public ItemRegistry getItemRegistry() { return itemRegistry; }
     public CustomCommandManager getCustomCommandManager() { return customCommandManager; }
+    public KeyAllManager getKeyAllManager() { return keyAllManager; }
 }

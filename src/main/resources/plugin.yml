@@ -22,6 +22,9 @@ commands:
     description: Get the Crate Wand to link blocks to crates
     usage: /cratewand
     permission: quickcrates.admin
+  keyall:
+    description: Give keys to all online players, or check next distribution
+    usage: /keyall <crate> [amount]
 
 permissions:
   quickcrates.*:

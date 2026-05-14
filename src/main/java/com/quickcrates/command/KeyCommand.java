@@ -57,6 +57,7 @@ public class KeyCommand implements CommandExecutor {
         int amt = 1; if (a.length>=4) try{amt=Integer.parseInt(a[3]);}catch(Exception e){}
         if (sub.equals("givevirtual")) {
             plugin.getKeyManager().addVirtual(t, crate.getId(), amt);
+            plugin.getStorageManager().saveAll();
             s.sendMessage(Msg.color("&aGave " + amt + " virtual keys."));
         } else if (sub.equals("give")) {
             ItemStack key = crate.getKeyItem(); key.setAmount(amt);

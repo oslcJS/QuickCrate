@@ -42,6 +42,13 @@ quickeco:
   enabled: true
   money-prefix: "&6&l$"
 
+keyall:
+  enabled: false
+  interval-minutes: 60
+  crate: vote
+  amount: 1
+  broadcast: "&6KeyAll &7- Everyone received &e{amount} &7{keys}!"
+
 custom-commands:
   keys:
     aliases: [mykeys, checkkeys]
