@@ -69,11 +69,20 @@ public class GuiClickListener implements Listener {
             }
             if (selected == null) return;
 
+            int needed = selected.getKeys();
+            int have = plugin.getKeyManager().countAll(player, crate);
+            if (have < needed) {
+                Msg.send(player, "no-key");
+                return;
+            }
+
+            plugin.getKeyManager().takeKeys(player, crate, needed);
+
             donutSmpPlayers.remove(player.getUniqueId());
             player.closeInventory();
             plugin.getCrateManager().unlock(player.getUniqueId());
 
-            if (player.getInventory().firstEmpty() == -1) {
+            if (!selected.getItems().isEmpty() && player.getInventory().firstEmpty() == -1) {
                 Msg.send(player, "inventory-full");
                 return;
             }

@@ -7,6 +7,15 @@ settings:
   default-animation: SPIN
   open-cooldown: 1
   reward-particle: HAPPY_VILLAGER
+  virtual-keys: true
+  universal-keys: false
+
+universal-key:
+  material: TRIPWIRE_HOOK
+  name: "&6&lUniversal Key"
+  lore:
+    - "&7Works on any crate."
+  glow: true
 
 storage:
   type: yaml

@@ -43,6 +43,10 @@ public class DonutSmpGui {
                 List<String> lore = meta.hasLore() ? new ArrayList<>(meta.getLore()) : new ArrayList<>();
                 lore.add("");
                 lore.add(Msg.color("&e&lClick to claim!"));
+                String costLine = reward.getKeys() == 1
+                        ? "&7Cost: &e1 Key"
+                        : "&7Cost: &e" + reward.getKeys() + " Keys";
+                lore.add(Msg.color(costLine));
                 meta.setLore(lore);
                 display.setItemMeta(meta);
             }

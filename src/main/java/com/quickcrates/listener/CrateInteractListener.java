@@ -57,6 +57,15 @@ public class CrateInteractListener implements Listener {
 
         if (plugin.getCrateManager().isOpening(p.getUniqueId())) return;
 
+        CrateMode mode = CrateMode.fromString(plugin.getConfig().getString("settings.mode", "DEFAULT"));
+
+        if (mode == CrateMode.DONUT_SMP) {
+            plugin.getCrateManager().lock(p.getUniqueId());
+            guiClickListener.trackDonutSmp(p.getUniqueId());
+            DonutSmpGui.open(plugin, p, crate);
+            return;
+        }
+
         ItemStack inHand = offhand
                 ? p.getInventory().getItemInOffHand()
                 : p.getInventory().getItemInMainHand();
@@ -82,13 +91,6 @@ public class CrateInteractListener implements Listener {
         }
 
         plugin.getCrateManager().lock(p.getUniqueId());
-
-        CrateMode mode = CrateMode.fromString(plugin.getConfig().getString("settings.mode", "DEFAULT"));
-        if (mode == CrateMode.DONUT_SMP) {
-            guiClickListener.trackDonutSmp(p.getUniqueId());
-            DonutSmpGui.open(plugin, p, crate);
-        } else {
-            runner.play(p, crate);
-        }
+        runner.play(p, crate);
     }
 }

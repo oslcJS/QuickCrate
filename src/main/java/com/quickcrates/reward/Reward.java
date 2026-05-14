@@ -22,8 +22,9 @@ public class Reward {
     private final List<String> commands;
     private final boolean broadcast;
     private final double money;
+    private final int keys;
 
-    public Reward(String id, ItemStack display, int weight, List<ItemStack> items, List<String> commands, boolean broadcast, double money) {
+    public Reward(String id, ItemStack display, int weight, List<ItemStack> items, List<String> commands, boolean broadcast, double money, int keys) {
         this.id = id;
         this.display = display;
         this.weight = Math.max(1, weight);
@@ -31,6 +32,7 @@ public class Reward {
         this.commands = commands;
         this.broadcast = broadcast;
         this.money = Math.max(0, money);
+        this.keys = Math.max(1, keys);
     }
 
     public static Reward fromConfig(ConfigurationSection sec) {
@@ -42,7 +44,8 @@ public class Reward {
         List<String> cmds = new ArrayList<>(sec.getStringList("commands"));
         boolean bc = sec.getBoolean("broadcast", false);
         double money = sec.getDouble("money", 0.0);
-        return new Reward(id, disp, weight, items, cmds, bc, money);
+        int keys = sec.getInt("keys", 1);
+        return new Reward(id, disp, weight, items, cmds, bc, money, keys);
     }
 
     public String getId() { return id; }
@@ -50,6 +53,8 @@ public class Reward {
     public int getWeight() { return weight; }
     public boolean isBroadcast() { return broadcast; }
     public double getMoney() { return money; }
+    public int getKeys() { return keys; }
+    public List<ItemStack> getItems() { return items; }
 
     public void give(Player player) {
         if (money > 0) {
