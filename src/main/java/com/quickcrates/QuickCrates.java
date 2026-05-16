@@ -1,11 +1,8 @@
 package com.quickcrates;
 
 import com.quickcrates.api.QuickCratesAPI;
-import com.quickcrates.command.CrateCommand;
-import com.quickcrates.command.CrateWandCommand;
 import com.quickcrates.command.CustomCommandManager;
-import com.quickcrates.command.KeyAllCommand;
-import com.quickcrates.command.KeyCommand;
+import com.quickcrates.command.KeysCommand;
 import com.quickcrates.command.QuickCratesCommand;
 import com.quickcrates.key.KeyAllManager;
 import com.quickcrates.compat.PapiHook;
@@ -58,10 +55,7 @@ public final class QuickCrates extends JavaPlugin implements QuickCratesAPI {
         Bukkit.getPluginManager().registerEvents(new CrateDisplayManager(this), this);
 
         registerCommand("quickcrates", new QuickCratesCommand(this));
-        registerCommand("crate", new CrateCommand(this));
-        registerCommand("key", new KeyCommand(this));
-        registerCommand("cratewand", new CrateWandCommand());
-        registerCommand("keyall", new KeyAllCommand(this));
+        registerCommand("keys", new KeysCommand(this));
 
         this.customCommandManager = new CustomCommandManager(this);
         customCommandManager.loadAll();

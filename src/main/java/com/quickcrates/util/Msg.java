@@ -20,11 +20,25 @@ public final class Msg {
     }
 
     public static void send(CommandSender to, String key, String... repl) {
+        String msg = resolve(key, repl);
+        for (String line : msg.split("\n")) {
+            to.sendMessage(prefix() + color(line));
+        }
+    }
+
+    public static void sendRaw(CommandSender to, String key, String... repl) {
+        String msg = resolve(key, repl);
+        for (String line : msg.split("\n")) {
+            to.sendMessage(color(line));
+        }
+    }
+
+    private static String resolve(String key, String... repl) {
         String msg = plugin.getConfig().getString("messages." + key, key);
         for (int i = 0; i + 1 < repl.length; i += 2) {
             msg = msg.replace("{" + repl[i] + "}", repl[i+1]);
         }
-        to.sendMessage(prefix() + color(msg));
+        return msg;
     }
 
     public static void playSound(Player p, String configPath, String fallback, float volume, float pitch) {

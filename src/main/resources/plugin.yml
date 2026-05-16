@@ -9,37 +9,45 @@ folia-supported: false
 
 commands:
   quickcrates:
-    description: Main QuickCrates command
+    description: QuickCrates admin root command
     aliases: [qc, crates]
     usage: /qc help
-  crate:
-    description: Crate management
-    aliases: [crate]
-  key:
-    description: Key management
-    aliases: [keys]
-  cratewand:
-    description: Get the Crate Wand to link blocks to crates
-    usage: /cratewand
-    permission: quickcrates.admin
-  keyall:
-    description: Give keys to all online players, or check next distribution
-    usage: /keyall <crate> [amount]
+  keys:
+    description: Show your keys
+    aliases: [mykeys]
+    permission: quickcrates.use
+    usage: /keys
 
 permissions:
-  quickcrates.*:
-    description: All QuickCrates permissions
+  quickcrates.admin:
+    description: Grants every QuickCrates admin permission below
     default: op
     children:
-      quickcrates.admin: true
-      quickcrates.use: true
+      quickcrates.reload: true
+      quickcrates.crate.edit: true
+      quickcrates.wand: true
+      quickcrates.key.give: true
+      quickcrates.keyall: true
       quickcrates.preview: true
-  quickcrates.admin:
-    description: Admin commands (give keys, reload, create crates)
+      quickcrates.use: true
+  quickcrates.reload:
+    description: Reload config and crates
     default: op
-  quickcrates.use:
-    description: Use crates
-    default: true
+  quickcrates.crate.edit:
+    description: Create, remove, and list crates
+    default: op
+  quickcrates.wand:
+    description: Receive the crate wand
+    default: op
+  quickcrates.key.give:
+    description: Give physical or virtual keys to a player
+    default: op
+  quickcrates.keyall:
+    description: Distribute keys to every online player
+    default: op
   quickcrates.preview:
-    description: Preview crate contents
+    description: Preview crate rewards
+    default: true
+  quickcrates.use:
+    description: Use crates and check your own keys
     default: true

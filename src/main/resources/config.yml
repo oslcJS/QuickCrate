@@ -60,12 +60,7 @@ keyall:
   amount: 1
   broadcast: "&6KeyAll &7- Everyone received &e{amount} &7{keys}!"
 
-custom-commands:
-  keys:
-    aliases: [mykeys, checkkeys]
-    permission: quickcrates.use
-    description: "Check your keys"
-    action: keys
+custom-commands: {}
 
 messages:
   prefix: "&6[QuickCrates] &r"
@@ -78,3 +73,59 @@ messages:
   broadcast-money: "&e{player} &7won &e{money} &7from &6{crate}&7!"
   reload: "&aQuickCrates reloaded."
   preview-title: "&8Preview: {crate}"
+
+  # Command errors
+  unknown-subcommand: "&cUnknown subcommand &e{sub}&c. Try &e/qc help&c."
+  player-only: "&cPlayers only."
+  player-not-found: "&cPlayer &e{name} &cnot found."
+  crate-unknown: "&cUnknown crate &e{name}&c."
+
+  # Usage hints
+  usage-create: "&7Usage: &e/qc create <name>"
+  usage-remove: "&7Usage: &e/qc remove <name>"
+  usage-preview: "&7Usage: &e/qc preview <crate>"
+  usage-key: "&7Usage: &e/qc key <give|givevirtual> <player> <crate> [amount]"
+
+  # Crate management
+  crate-exists: "&cA crate named &e{name} &calready exists."
+  crate-create-failed: "&cFailed to create crate file: {error}"
+  crate-created: "&aCrate &e{name} &acreated. &7Edit &bcrates/{name}.yml&7, then use &6/qc wand &7to link blocks."
+  crate-remove-failed: "&cCould not delete crate file for &e{name}&c."
+  crate-removed: "&cCrate &e{name} &cremoved."
+
+  # Listing
+  list-header: "&fLoaded crates: &e{count}"
+  list-entry: " &7- &e{id} &8({name}&8)"
+
+  # Wand
+  wand-given: "&aYou received the &6&lCrate Wand&a. &7Right-click a chest/barrel/shulker to link it."
+
+  # Key give
+  key-given-physical: "&aGave &e{amount} &aphysical key(s) of &6{crate} &ato &e{player}&a."
+  key-given-virtual: "&aGave &e{amount} &avirtual key(s) of &6{crate} &ato &e{player}&a."
+
+  # KeyAll
+  keyall-ready: "&6KeyAll &7- Ready to distribute."
+  keyall-countdown: "&6KeyAll &7- Next distribution in &e{minutes}m {seconds}s&7."
+  keyall-distributed: "&aGave &e{amount} &a{crate} &akey(s) to &e{count} &aplayers."
+
+  # /keys (player)
+  keys-header: "&6&l--- Your Keys ---"
+  keys-entry: "&e{crate} &7- &e{total} &7(&aphysical: &e{physical} &7| &avirtual: &e{virtual}&7)"
+  keys-entry-universal: "&6Universal Keys &7- &e{total} &7(&aphysical: &e{physical} &7| &avirtual: &e{virtual}&7)"
+  keys-none: "&7You don't have any keys."
+
+  # Help
+  help: |-
+    &6&lQuickCrates &7v{version}
+    &e/qc list &7- list loaded crates
+    &e/qc create <name> &7- create a new crate
+    &e/qc remove <name> &7- delete a crate
+    &e/qc preview <crate> &7- open preview GUI
+    &e/qc wand &7- receive the Crate Wand
+    &e/qc key give <player> <crate> [amount] &7- give physical keys
+    &e/qc key givevirtual <player> <crate> [amount] &7- give virtual keys
+    &e/qc keyall &7- show next distribution time
+    &e/qc keyall <crate> [amount] &7- distribute keys to all online
+    &e/qc reload &7- reload config & crates
+    &7Players: &e/keys &7to check your own keys.

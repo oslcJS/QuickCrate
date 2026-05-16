@@ -107,10 +107,15 @@ Supports:
 
 ```txt
 /qc list
-/qc reload
+/qc create <name>
+/qc remove <name>
 /qc preview <crate>
-/qc givekey <player> <crate>
-/qc setlocation <crate>
+/qc wand
+/qc key give <player> <crate> [amount]
+/qc key givevirtual <player> <crate> [amount]
+/qc keyall <crate> [amount]
+/qc reload
+/keys
 ```
 
 ---
